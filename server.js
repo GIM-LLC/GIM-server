@@ -5,31 +5,42 @@ const app = require('./lib/app');
 const server = http.createServer(app);
 const io = new Server(server, { cors: true });
 
-const PORT = process.env.PORT || 7890;
+const PORT = process.env.PORT || 8080;
 
 const { users, addUser, deleteUser } = require('./lib/socket/user-utils');
 
 const onConnection = socket => {
+  // on every connection, add a user a join that user's socket to the current room
   addUser(socket);
   socket.join(`${users[socket.id].room}`);
 
-  socket.on('movement', data => {
-    data.id = socket.id;
-    socket.broadcast.to(`${users[socket.id]}.room`).emit('moving', data);
-  });
+  // take in cursor movement data and broadcast to other clients
+  const onMovement = movementData => {
+    movementData.id = socket.id;
+    socket.broadcast.to(`${users[socket.id].room}`).emit('moving', movementData);
+  };
 
-  socket.on('disconnect', () => {
+  // take in button state data and broadcast to other clients
+  const onButtonClick = buttonState => {
+    socket.broadcast.to(`${users[socket.id].room}`).emit('click', buttonState);
+  };
+
+  // take in message data and emit to all clients
+  const onMessage = message => {
+    socket.to(`${users[socket.id].room}`).emit('socket message', message);
+  };
+
+  // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
+  const onDisconnect = () => {
     socket.broadcast.to(`${users[socket.id].room}`).emit('removeCursor', socket.id);
     deleteUser(socket);
-  });
+  };
 
-  socket.on('click', buttonState => {
-    socket.broadcast.to(`${users[socket.id].room}`).emit('click', buttonState);
-  });
-
-  socket.on('client message', (message) => {
-    socket.to(`${users[socket.id].room}`).emit('socket message', message);
-  });
+  // attach functions to listeners
+  socket.on('movement', onMovement);
+  socket.on('click', onButtonClick);
+  socket.on('client message', onMessage);
+  socket.on('disconnect', onDisconnect);
 };
 
 io.sockets.on('connection', onConnection);
