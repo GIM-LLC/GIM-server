@@ -1,10 +1,5 @@
-const pool = require('../lib/utils/pool');
-const setup = require('../data/setup');
-const request = require('supertest');
-const app = require('../lib/app');
-
 describe('GIM-server routes', () => {
-  beforeEach(() => {
-    return setup(pool);
+  it('is a test', () => {
+    expect(true).toEqual(true);
   });
 });
