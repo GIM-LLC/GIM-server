@@ -22,7 +22,12 @@ const onConnection = socket => {
 
   // take in button state data and broadcast to other clients
   const onButtonClick = buttonState => {
-    socket.broadcast.to(`${users[socket.id].room}`).emit('click', buttonState);
+    socket.broadcast.to(`${users[socket.id].room}`).emit('socket serach click', buttonState);
+  };
+
+  // take in input from search input field
+  const onInputChange = inputValue => {
+    socket.broadcast.to(`${users[socket.id].room}`).emit('search input typing', inputValue);
   };
 
   // take in message data and emit to all clients
@@ -38,7 +43,8 @@ const onConnection = socket => {
 
   // attach functions to listeners
   socket.on('movement', onMovement);
-  socket.on('click', onButtonClick);
+  socket.on('searchSubmit', onButtonClick);
+  socket.on('search input', onInputChange);
   socket.on('client message', onMessage);
   socket.on('disconnect', onDisconnect);
 };
