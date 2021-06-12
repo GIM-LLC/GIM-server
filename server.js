@@ -12,33 +12,37 @@ const { users, addUser, deleteUser } = require('./lib/socket/user-utils');
 const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
   addUser(socket);
-  socket.join(`${users[socket.id].room}`);
-  socket.broadcast.to(`${users[socket.id].room}`).emit('new user', { [socket.id]: socket.id });
+  const currentRoom = `${users}[socket.id].room`;
+
+  socket.join(currentRoom);
+  socket.broadcast.to(currentRoom).emit('new user', { [socket.id]: socket.id });
+
+  socket.to(socket.id).emit('current users', Object.keys(users));
 
   // take in cursor movement data and broadcast to other clients
   const onMovement = movementData => {
     movementData.id = socket.id;
-    socket.broadcast.to(`${users[socket.id].room}`).emit('moving', movementData);
+    socket.broadcast.to(currentRoom).emit('moving', movementData);
   };
 
   // take in button state data and broadcast to other clients
   const onButtonClick = buttonState => {
-    socket.broadcast.to(`${users[socket.id].room}`).emit('socket serach click', buttonState);
+    socket.broadcast.to(currentRoom).emit('socket serach click', buttonState);
   };
 
   // take in input from search input field
   const onInputChange = inputValue => {
-    socket.broadcast.to(`${users[socket.id].room}`).emit('search input typing', inputValue);
+    socket.broadcast.to(currentRoom).emit('search input typing', inputValue);
   };
 
   // take in message data and emit to all clients
   const onMessage = message => {
-    socket.to(`${users[socket.id].room}`).emit('socket message', message);
+    socket.to(currentRoom).emit('socket message', message);
   };
 
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
-    socket.broadcast.to(`${users[socket.id].room}`).emit('removeCursor', socket.id);
+    socket.broadcast.to(currentRoom).emit('removeCursor', socket.id);
     deleteUser(socket);
   };
 
