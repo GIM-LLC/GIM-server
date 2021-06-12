@@ -13,7 +13,7 @@ const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
   addUser(socket);
   socket.join(`${users[socket.id].room}`);
-  socket.broadcast.to(`${users[socket.id].room}`).emit('new user', socket.id);
+  socket.broadcast.to(`${users[socket.id].room}`).emit('new user', { [socket.id]: socket.id });
 
   // take in cursor movement data and broadcast to other clients
   const onMovement = movementData => {
