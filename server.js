@@ -30,6 +30,11 @@ const onConnection = socket => {
     socket.broadcast.to(`${users[socket.id].room}`).emit('search input typing', inputValue);
   };
 
+  // take in hover data from nav links (for now)
+  const onHover = hoverData => {
+    socket.to(`${users[socket.id].room}`).emit('socket link hover', hoverData);
+  };
+
   // take in message data and emit to all clients
   const onMessage = message => {
     socket.to(`${users[socket.id].room}`).emit('socket message', message);
@@ -45,6 +50,7 @@ const onConnection = socket => {
   socket.on('movement', onMovement);
   socket.on('searchSubmit', onButtonClick);
   socket.on('search input', onInputChange);
+  socket.on('link hover', onHover);
   socket.on('client message', onMessage);
   socket.on('disconnect', onDisconnect);
 };
