@@ -47,6 +47,10 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socket message', message);
   };
 
+  const onSocialIconChange = iconData => {
+    socket.to(currentRoom).emit('icon change', iconData);
+  };
+
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
     deleteUser(socket, users);
@@ -59,6 +63,7 @@ const onConnection = socket => {
   socket.on('search input', onInputChange);
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
+  socket.on('icon change', onSocialIconChange);
   socket.on('disconnect', onDisconnect);
 };
 
