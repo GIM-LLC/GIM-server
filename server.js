@@ -14,7 +14,7 @@ const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
   addUser(socket, users);
   const currentRoom = `${users[socket.id].room}`;
-  
+
   socket.join(currentRoom);
 
   socket.broadcast.to(currentRoom).emit('new user', { [socket.id]: socket.id });
@@ -47,6 +47,11 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socket message', message);
   };
 
+  //take in user click on header to all users
+  const onHeaderClick = (clickCount) => {
+    socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
+  };
+
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
     deleteUser(socket, users);
@@ -59,6 +64,7 @@ const onConnection = socket => {
   socket.on('search input', onInputChange);
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
+  socket.on('headerTextClick', onHeaderClick);
   socket.on('disconnect', onDisconnect);
 };
 
