@@ -13,10 +13,10 @@ const { addUser, deleteUser } = require('./lib/socket/user-utils');
 const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
   addUser(socket, users);
-  socket.join(`${users[socket.id].room}`);
-  const currentRoom = `${users}[socket.id].room`;
-
+  const currentRoom = `${users[socket.id].room}`;
+  
   socket.join(currentRoom);
+
   socket.broadcast.to(currentRoom).emit('new user', { [socket.id]: socket.id });
 
   // socket.to(socket.id).emit('current users', Object.keys(users));
@@ -39,7 +39,7 @@ const onConnection = socket => {
 
   // take in hover data from nav links (for now)
   const onHover = hoverData => {
-    socket.to(`${users[socket.id].room}`).emit('socket link hover', hoverData);
+    socket.to(currentRoom).emit('socket link hover', hoverData);
   };
 
   // take in message data and emit to all clients
