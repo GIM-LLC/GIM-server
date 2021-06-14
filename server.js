@@ -13,6 +13,7 @@ const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
   addUser(socket);
   socket.join(`${users[socket.id].room}`);
+  socket.broadcast.to(`${users[socket.id].room}`).emit('new user', socket.id);
 
   // take in cursor movement data and broadcast to other clients
   const onMovement = movementData => {
@@ -50,7 +51,7 @@ const onConnection = socket => {
   socket.on('movement', onMovement);
   socket.on('searchSubmit', onButtonClick);
   socket.on('search input', onInputChange);
-  socket.on('link hover', onHover);
+ socket.on('link hover', onHover);
   socket.on('client message', onMessage);
   socket.on('disconnect', onDisconnect);
 };
@@ -60,3 +61,4 @@ io.sockets.on('connection', onConnection);
 server.listen(PORT, () => {
   console.log(`Started on ${PORT}`);
 });
+
