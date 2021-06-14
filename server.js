@@ -7,18 +7,20 @@ const io = new Server(server, { cors: true });
 
 const PORT = process.env.PORT || 8080;
 
-const { users, addUser, deleteUser } = require('./lib/socket/user-utils');
+const users = {};
+const { addUser, deleteUser } = require('./lib/socket/user-utils');
 
 const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
-  addUser(socket);
+  addUser(socket, users);
+  socket.join(`${users[socket.id].room}`);
   const currentRoom = `${users}[socket.id].room`;
 
   socket.join(currentRoom);
   socket.broadcast.to(currentRoom).emit('new user', { [socket.id]: socket.id });
 
   // socket.to(socket.id).emit('current users', Object.keys(users));
-
+  
   // take in cursor movement data and broadcast to other clients
   const onMovement = movementData => {
     movementData.id = socket.id;
@@ -47,8 +49,8 @@ const onConnection = socket => {
 
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
+    deleteUser(socket, users);
     socket.broadcast.to(currentRoom).emit('removeCursor', socket.id);
-    deleteUser(socket);
   };
 
   // attach functions to listeners
