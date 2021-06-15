@@ -55,8 +55,8 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
   };
 
-  const onFooterTitleClick = (clickCount) => {
-    socket.to(currentRoom).emit('socketFooterTitleClick', clickCount);
+  const onFooterTitleClick = titleData => {
+    socket.to(currentRoom).emit('socketFooterTitleClick', titleData);
   };
 
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
@@ -73,7 +73,7 @@ const onConnection = socket => {
   socket.on('client message', onMessage);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
-  socket.on('footerTitleClick', onFooterTitleClick);
+  socket.on('socketFooterTitleClick', onFooterTitleClick);
   socket.on('disconnect', onDisconnect);
 };
 
