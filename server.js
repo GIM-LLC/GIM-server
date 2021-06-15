@@ -47,6 +47,9 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socket message', message);
   };
 
+  const onSocialIconChange = iconData => {
+    socket.to(currentRoom).emit('icon change', iconData);
+  };
   //take in user click on header to all users
   const onHeaderClick = (clickCount) => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
@@ -68,6 +71,7 @@ const onConnection = socket => {
   socket.on('search input', onInputChange);
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
+  socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
   socket.on('footerTitleClick', onFooterTitleClick);
   socket.on('disconnect', onDisconnect);
@@ -78,4 +82,3 @@ io.sockets.on('connection', onConnection);
 server.listen(PORT, () => {
   console.log(`Started on ${PORT}`);
 });
-
