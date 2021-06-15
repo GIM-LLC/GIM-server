@@ -46,7 +46,7 @@ const onConnection = socket => {
   const onMessage = message => {
     socket.to(currentRoom).emit('socket message', message);
   };
-
+  // take in ghost icon data and emit to all clients
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
   };
@@ -54,7 +54,13 @@ const onConnection = socket => {
   const onHeaderClick = (clickCount) => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
   };
-
+  //take in image gallery button data and emit to all clients
+  const onImageButtonTextChange = (imageButtonData) => {
+    socket.broadcast.to(currentRoom).emit('button text change', imageButtonData);
+  };
+  const onImageHover = (imageHoverData) => {
+    socket.broadcast.to(currentRoom).emit('image hover', imageHoverData);
+  };
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
     deleteUser(socket, users);
@@ -69,6 +75,8 @@ const onConnection = socket => {
   socket.on('client message', onMessage);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
+  socket.on('button text change', onImageButtonTextChange);
+  socket.on('image hover', onImageHover);
   socket.on('disconnect', onDisconnect);
 };
 
