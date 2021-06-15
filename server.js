@@ -50,9 +50,19 @@ const onConnection = socket => {
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
   };
+
   //take in user click on header to all users
   const onHeaderClick = (clickCount) => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
+  };
+
+  // presentational event that indicates the ghost story has been flipped over by a client and should be flipped for the other clients
+  const onGhostStoryFlip = () => {
+    socket.to(currentRoom).emit('ghostStoryFlip');
+  };
+
+  const onGhostStoryPoint = points => {
+    socket.broadcast.to(currentRoom).emit('socketGhostStoryPoint', points);
   };
 
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
@@ -69,6 +79,8 @@ const onConnection = socket => {
   socket.on('client message', onMessage);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
+  socket.on('ghostStoryFlip', onGhostStoryFlip);
+  socket.on('ghostStoryPoint', onGhostStoryPoint);
   socket.on('disconnect', onDisconnect);
 };
 
