@@ -49,6 +49,7 @@ const onConnection = socket => {
 
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
+  };
   //take in user click on header to all users
   const onHeaderClick = (clickCount) => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
@@ -76,4 +77,3 @@ io.sockets.on('connection', onConnection);
 server.listen(PORT, () => {
   console.log(`Started on ${PORT}`);
 });
-
