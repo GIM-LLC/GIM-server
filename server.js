@@ -51,6 +51,12 @@ const onConnection = socket => {
   const onMessage = message => {
     socket.to(currentRoom).emit('socket message', message);
   };
+
+  // mission section hover
+  const onMissionHover = hover => {
+    socket.to(currentRoom).emit('socket mission hover', hover);
+  };
+
   // take in ghost icon data and emit to all clients
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
@@ -91,6 +97,7 @@ const onConnection = socket => {
   socket.on('duck', onDuckInput);
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
+  socket.on('missionHover', onMissionHover);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
   socket.on('ghostStoryFlip', onGhostStoryFlip);
