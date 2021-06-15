@@ -61,10 +61,11 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
   };
 
+  //take in user click on footer to all users
   const onFooterTitleClick = titleData => {
     socket.to(currentRoom).emit('socketFooterTitleClick', titleData);
   };
-  
+
   // presentational event that indicates the ghost story has been flipped over by a client and should be flipped for the other clients
   const onGhostStoryFlip = () => {
     socket.to(currentRoom).emit('ghostStoryFlip');
