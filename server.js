@@ -63,6 +63,8 @@ const onConnection = socket => {
 
   const onFooterTitleClick = titleData => {
     socket.to(currentRoom).emit('socketFooterTitleClick', titleData);
+  };
+  
   // presentational event that indicates the ghost story has been flipped over by a client and should be flipped for the other clients
   const onGhostStoryFlip = () => {
     socket.to(currentRoom).emit('ghostStoryFlip');
@@ -95,14 +97,11 @@ const onConnection = socket => {
   socket.on('client message', onMessage);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
-<<<<<<< HEAD
-  socket.on('socketFooterTitleClick', onFooterTitleClick);
-=======
+  socket.on('footerTitleClick', onFooterTitleClick);
   socket.on('ghostStoryFlip', onGhostStoryFlip);
   socket.on('ghostStoryPoint', onGhostStoryPoint);
   socket.on('button text change', onImageButtonTextChange);
   socket.on('image hover', onImageHover);
->>>>>>> f213ca87fce8007034e27631c568a51526485d91
   socket.on('disconnect', onDisconnect);
 };
 
