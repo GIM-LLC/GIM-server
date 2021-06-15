@@ -29,12 +29,17 @@ const onConnection = socket => {
 
   // take in button state data and broadcast to other clients
   const onButtonClick = buttonState => {
-    socket.broadcast.to(currentRoom).emit('socket serach click', buttonState);
+    socket.broadcast.to(currentRoom).emit('socket search click', buttonState);
   };
 
   // take in input from search input field
   const onInputChange = inputValue => {
     socket.broadcast.to(currentRoom).emit('search input typing', inputValue);
+  };
+
+  //when 'duck' is entered into search bar duck data === TRUE 
+  const onDuckInput = duckData => {
+    socket.to(currentRoom).emit('duck input', duckData);
   };
 
   // take in hover data from nav links (for now)
@@ -75,6 +80,7 @@ const onConnection = socket => {
   socket.on('movement', onMovement);
   socket.on('searchSubmit', onButtonClick);
   socket.on('search input', onInputChange);
+  socket.on('duck', onDuckInput);
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
   socket.on('icon change', onSocialIconChange);
