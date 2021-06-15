@@ -52,6 +52,11 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socket message', message);
   };
 
+  // mission section hover
+  const onMissionHover = hover => {
+    socket.to(currentRoom).emit('socket mission hover', hover);
+  };
+
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
   };
@@ -73,6 +78,7 @@ const onConnection = socket => {
   socket.on('duck', onDuckInput);
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
+  socket.on('missionHover', onMissionHover);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
   socket.on('disconnect', onDisconnect);
