@@ -57,6 +57,16 @@ const onConnection = socket => {
     socket.to(currentRoom).emit('socket mission hover', hover);
   };
 
+  // transparent footer click 
+  const onTransparentClick = () => {
+    socket.to(currentRoom).emit('socket transparent click');
+  };
+
+  // transparent footer click points
+  const onTransparentPoints = () => {
+    socket.to(currentRoom).emit('socket transparent points');
+  };
+
   // take in ghost icon data and emit to all clients
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
@@ -103,6 +113,8 @@ const onConnection = socket => {
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
   socket.on('missionHover', onMissionHover);
+  socket.on('transparent click', onTransparentClick);
+  socket.on('transparent points', onTransparentPoints);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
   socket.on('footerTitleClick', onFooterTitleClick);
