@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8080;
 const users = {};
 const { addUser, deleteUser } = require('./lib/socket/user-utils');
 
-const onConnection = (socket) => {
+const onConnection = socket => {
   // on every connection, add a user a join that user's socket to the current room
   addUser(socket, users);
   const currentRoom = `${users[socket.id].room}`;
@@ -57,6 +57,16 @@ const onConnection = (socket) => {
     socket.to(currentRoom).emit('socket mission hover', hover);
   };
 
+  // transparent footer click 
+  const onTransparentClick = () => {
+    socket.to(currentRoom).emit('socket transparent click');
+  };
+
+  // transparent footer click points
+  const onTransparentPoints = () => {
+    socket.to(currentRoom).emit('socket transparent points');
+  };
+
   // take in ghost icon data and emit to all clients
   const onSocialIconChange = iconData => {
     socket.to(currentRoom).emit('icon change', iconData);
@@ -96,6 +106,10 @@ const onConnection = (socket) => {
     socket.to(currentRoom).emit('dont socket', btnClicked);
   };
 
+  const onGlowingObjectClick = (glowingObjectData) => {
+    socket.broadcast.to(currentRoom).emit('socket glowing object', glowingObjectData);
+  };
+
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
     deleteUser(socket, users);
@@ -110,6 +124,8 @@ const onConnection = (socket) => {
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
   socket.on('missionHover', onMissionHover);
+  socket.on('transparent click', onTransparentClick);
+  socket.on('transparent points', onTransparentPoints);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
   socket.on('footerTitleClick', onFooterTitleClick);
@@ -118,6 +134,7 @@ const onConnection = (socket) => {
   socket.on('button text change', onImageButtonTextChange);
   socket.on('image hover', onImageHover);
   socket.on('dont click', (btnClicked) => onDontClick(btnClicked));
+  socket.on('glowing object click', onGlowingObjectClick);
   socket.on('disconnect', onDisconnect);
 };
 
