@@ -99,6 +99,15 @@ const onConnection = socket => {
     socket.broadcast.to(currentRoom).emit('image hover', imageHoverData);
   };
 
+  //click and points broadcast from ghost image
+  const onGhostClick = (newPosition) => {
+    socket.to(currentRoom).emit('socket ghost click', newPosition);
+  };
+
+  const onGhostPoints = () => {
+    socket.to(currentRoom).emit('socket ghost points');
+  };
+
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
     deleteUser(socket, users);
@@ -122,6 +131,8 @@ const onConnection = socket => {
   socket.on('ghostStoryPoint', onGhostStoryPoint);
   socket.on('button text change', onImageButtonTextChange);
   socket.on('image hover', onImageHover);
+  socket.on('ghost click', onGhostClick);
+  socket.on('ghost points', onGhostPoints);
   socket.on('disconnect', onDisconnect);
 };
 
