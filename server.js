@@ -93,7 +93,12 @@ const onConnection = (socket) => {
 
   // When one user is hovering over Join Us, a second user clicks on "DONT" to change text to "I SAID DONT"
   const onDontClick = (btnClicked) => {
-    socket.to(currentRoom).emit('dont socket', btnClicked);
+    socket.to(currentRoom).emit('dontSocket', btnClicked);
+  };
+
+  // when btnClicked === 3, increment points by 3 and emit to other players
+  const onDontClickPoints = (points) => {
+    socket.broadcast.to(currentRoom).emit('dontClickPoints', points);
   };
 
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
@@ -117,7 +122,8 @@ const onConnection = (socket) => {
   socket.on('ghostStoryPoint', onGhostStoryPoint);
   socket.on('button text change', onImageButtonTextChange);
   socket.on('image hover', onImageHover);
-  socket.on('dont click', (btnClicked) => onDontClick(btnClicked));
+  socket.on('dontClick', onDontClick);
+  socket.on('dontClickPoints', onDontClickPoints);
   socket.on('disconnect', onDisconnect);
 };
 
