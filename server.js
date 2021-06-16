@@ -45,8 +45,6 @@ const onConnection = (socket) => {
 
   //when 'duck' is entered into search bar duck data === TRUE
   const onDuckInput = (duckData) => {
-    socket.to(currentRoom).emit('duck input', duckData);
-  };
 
   // take in hover data from nav links (for now)
   const onHover = (hoverData) => {
@@ -63,13 +61,23 @@ const onConnection = (socket) => {
     socket.to(currentRoom).emit('socket mission hover', hover);
   };
 
+  // transparent footer click 
+  const onTransparentClick = () => {
+    socket.to(currentRoom).emit('socket transparent click');
+  };
+
+  // transparent footer click points
+  const onTransparentPoints = () => {
+    socket.to(currentRoom).emit('socket transparent points');
+  };
+
   // take in ghost icon data and emit to all clients
   const onSocialIconChange = (iconData) => {
     socket.to(currentRoom).emit('icon change', iconData);
   };
 
   //take in user click on header to all users
-  const onHeaderClick = (clickCount) => {
+  const onHeaderClick = clickCount => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
   };
 
@@ -93,13 +101,21 @@ const onConnection = (socket) => {
       .to(currentRoom)
       .emit('button text change', imageButtonData);
   };
-  const onImageHover = (imageHoverData) => {
+  const onImageHover = imageHoverData => {
     socket.broadcast.to(currentRoom).emit('image hover', imageHoverData);
   };
   const onGlowingObjectClick = (glowingObjectData) => {
     socket.broadcast
       .to(currentRoom)
       .emit('socket glowing object', glowingObjectData);
+  };
+  // When one user is hovering over Join Us, a second user clicks on "DONT" to change text to "I SAID DONT"
+  const onDontClick = btnClicked => {
+    socket.to(currentRoom).emit('dont socket', btnClicked);
+  };
+
+  const onGlowingObjectClick = (glowingObjectData) => {
+    socket.broadcast.to(currentRoom).emit('socket glowing object', glowingObjectData);
   };
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
@@ -115,6 +131,8 @@ const onConnection = (socket) => {
   socket.on('link hover', onHover);
   socket.on('client message', onMessage);
   socket.on('missionHover', onMissionHover);
+  socket.on('transparent click', onTransparentClick);
+  socket.on('transparent points', onTransparentPoints);
   socket.on('icon change', onSocialIconChange);
   socket.on('headerTextClick', onHeaderClick);
   socket.on('footerTitleClick', onFooterTitleClick);
@@ -122,6 +140,7 @@ const onConnection = (socket) => {
   socket.on('ghostStoryPoint', onGhostStoryPoint);
   socket.on('button text change', onImageButtonTextChange);
   socket.on('image hover', onImageHover);
+  socket.on('dont click', (btnClicked) => onDontClick(btnClicked));
   socket.on('glowing object click', onGlowingObjectClick);
   socket.on('disconnect', onDisconnect);
   socket.on('game start', onGameStart);
