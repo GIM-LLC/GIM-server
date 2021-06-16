@@ -108,6 +108,14 @@ const onConnection = (socket) => {
     socket.broadcast
       .to(currentRoom)
       .emit('socket glowing object', glowingObjectData);
+    
+  //click and points broadcast from ghost image
+  const onGhostClick = (newPosition) => {
+    socket.to(currentRoom).emit('socket ghost click', newPosition);
+  };
+
+  const onGhostPoints = () => {
+    socket.to(currentRoom).emit('socket ghost points');
   };
   // When one user is hovering over Join Us, a second user clicks on "DONT" to change text to "I SAID DONT"
   const onDontClick = btnClicked => {
@@ -140,6 +148,8 @@ const onConnection = (socket) => {
   socket.on('ghostStoryPoint', onGhostStoryPoint);
   socket.on('button text change', onImageButtonTextChange);
   socket.on('image hover', onImageHover);
+  socket.on('ghost click', onGhostClick);
+  socket.on('ghost points', onGhostPoints);
   socket.on('dont click', (btnClicked) => onDontClick(btnClicked));
   socket.on('glowing object click', onGlowingObjectClick);
   socket.on('disconnect', onDisconnect);
