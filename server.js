@@ -46,6 +46,7 @@ const onConnection = (socket) => {
   //when 'duck' is entered into search bar duck data === TRUE
   const onDuckInput = (duckData) => {
 
+  };
   // take in hover data from nav links (for now)
   const onHover = (hoverData) => {
     socket.to(currentRoom).emit('socket link hover', hoverData);
