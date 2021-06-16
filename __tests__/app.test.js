@@ -5,7 +5,7 @@ const Client = require('socket.io-client');
 const { addUser } = require('../lib/socket/user-utils.js');
 
 const testUsers = {};
-
+const testGames = [];
 jest.setTimeout(5000);
 describe('user room functionality', () => {
   let io,
@@ -26,13 +26,20 @@ describe('user room functionality', () => {
       clientSocket4 = new Client(`http://localhost:${port}`);
 
       io.on('connection', (socket) => {
-        addUser(socket, testUsers);
+        addUser(socket, testUsers, testGames);
       });
 
       clientSocket.on('connect', done);
       clientSocket2.on('connect', done);
       clientSocket3.on('connect', done);
       clientSocket4.on('connect', done);
+
+      return (() => {
+        clientSocket.off('connect', done);
+        clientSocket2.off('connect', done);
+        clientSocket3.off('connect', done);
+        clientSocket4.off('connect', done);
+      });
     });
   });
 
