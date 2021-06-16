@@ -62,8 +62,8 @@ const onConnection = (socket) => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
   };
   // When one user is hovering over Join Us, a second user clicks on "DONT" to change text to "I SAID DONT"
-  const onDontClick = () => {
-    socket.to(currentRoom).emit('SocketDontClick');
+  const onDontClick = (btnClicked) => {
+    socket.to(currentRoom).emit('SocketDontClick', btnClicked);
   };
 
   ////////////////////////////////
