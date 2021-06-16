@@ -8,11 +8,13 @@ const io = new Server(server, { cors: true });
 const PORT = process.env.PORT || 8080;
 
 const users = {};
+const games = [];
+
 const { addUser, deleteUser } = require('./lib/socket/user-utils');
 
 const onConnection = (socket) => {
   // on every connection, add a user a join that user's socket to the current room
-  addUser(socket, users);
+  addUser(socket, users, games);
   const currentRoom = `${users[socket.id].room}`;
 
   socket.join(currentRoom);
@@ -25,6 +27,10 @@ const onConnection = (socket) => {
   const onMovement = (movementData) => {
     movementData.id = socket.id;
     socket.broadcast.to(currentRoom).emit('moving', movementData);
+  };
+
+  const onGameStart = () => {
+    if (!games.includes(currentRoom)) games.push(currentRoom);
   };
 
   // take in button state data and broadcast to other clients
@@ -91,7 +97,9 @@ const onConnection = (socket) => {
     socket.broadcast.to(currentRoom).emit('image hover', imageHoverData);
   };
   const onGlowingObjectClick = (glowingObjectData) => {
-    socket.broadcast.to(currentRoom).emit('socket glowing object', glowingObjectData);
+    socket.broadcast
+      .to(currentRoom)
+      .emit('socket glowing object', glowingObjectData);
   };
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
@@ -116,6 +124,7 @@ const onConnection = (socket) => {
   socket.on('image hover', onImageHover);
   socket.on('glowing object click', onGlowingObjectClick);
   socket.on('disconnect', onDisconnect);
+  socket.on('game start', onGameStart);
 };
 
 io.sockets.on('connection', onConnection);
