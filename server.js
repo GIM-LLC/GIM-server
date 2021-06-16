@@ -37,7 +37,7 @@ const onConnection = socket => {
     socket.broadcast.to(currentRoom).emit('search input typing', inputValue);
   };
 
-  //when 'duck' is entered into search bar duck data === TRUE 
+  //when 'duck' is entered into search bar duck data === TRUE
   const onDuckInput = duckData => {
     socket.to(currentRoom).emit('duck input', duckData);
   };
@@ -73,7 +73,7 @@ const onConnection = socket => {
   };
 
   //take in user click on header to all users
-  const onHeaderClick = (clickCount) => {
+  const onHeaderClick = clickCount => {
     socket.to(currentRoom).emit('socketHeaderTextClick', clickCount);
   };
 
@@ -92,10 +92,12 @@ const onConnection = socket => {
   };
 
   //take in image gallery button data and emit to all clients
-  const onImageButtonTextChange = (imageButtonData) => {
-    socket.broadcast.to(currentRoom).emit('button text change', imageButtonData);
+  const onImageButtonTextChange = imageButtonData => {
+    socket.broadcast
+      .to(currentRoom)
+      .emit('button text change', imageButtonData);
   };
-  const onImageHover = (imageHoverData) => {
+  const onImageHover = imageHoverData => {
     socket.broadcast.to(currentRoom).emit('image hover', imageHoverData);
   };
 
@@ -106,6 +108,14 @@ const onConnection = socket => {
 
   const onGhostPoints = () => {
     socket.to(currentRoom).emit('socket ghost points');
+  };
+  // When one user is hovering over Join Us, a second user clicks on "DONT" to change text to "I SAID DONT"
+  const onDontClick = btnClicked => {
+    socket.to(currentRoom).emit('dont socket', btnClicked);
+  };
+
+  const onGlowingObjectClick = (glowingObjectData) => {
+    socket.broadcast.to(currentRoom).emit('socket glowing object', glowingObjectData);
   };
 
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
@@ -133,6 +143,8 @@ const onConnection = socket => {
   socket.on('image hover', onImageHover);
   socket.on('ghost click', onGhostClick);
   socket.on('ghost points', onGhostPoints);
+  socket.on('dont click', (btnClicked) => onDontClick(btnClicked));
+  socket.on('glowing object click', onGlowingObjectClick);
   socket.on('disconnect', onDisconnect);
 };
 
