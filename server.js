@@ -108,7 +108,7 @@ const onConnection = (socket) => {
     socket.broadcast
       .to(currentRoom)
       .emit('socket glowing object', glowingObjectData);
-    
+  };
   //click and points broadcast from ghost image
   const onGhostClick = (newPosition) => {
     socket.to(currentRoom).emit('socket ghost click', newPosition);
@@ -120,10 +120,6 @@ const onConnection = (socket) => {
   // When one user is hovering over Join Us, a second user clicks on "DONT" to change text to "I SAID DONT"
   const onDontClick = btnClicked => {
     socket.to(currentRoom).emit('dont socket', btnClicked);
-  };
-
-  const onGlowingObjectClick = (glowingObjectData) => {
-    socket.broadcast.to(currentRoom).emit('socket glowing object', glowingObjectData);
   };
   // broadcast a remove cursor signal to other clients when a client disconnects, delete the user
   const onDisconnect = () => {
