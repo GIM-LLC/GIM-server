@@ -6,23 +6,26 @@ const { addUser } = require('../lib/socket/user-utils.js');
 
 const testUsers = {};
 const testGames = [];
-jest.setTimeout(5000);
+jest.setTimeout(15000);
 describe('user room functionality', () => {
   let io,
     clientSocket,
     clientSocket2,
     clientSocket3,
-    clientSocket4;
+    clientSocket4,
+    httpServer;
 
+  beforeAll(async () => {
+    httpServer = await createServer();
+  });
   beforeAll((done) => {
-    const httpServer = createServer();
+    
     io = new Server(httpServer);
     httpServer.listen(() => {
       const port = httpServer.address().port;
       clientSocket = new Client(`http://localhost:${port}`);
       clientSocket2 = new Client(`http://localhost:${port}`);
       clientSocket3 = new Client(`http://localhost:${port}`);
-      clientSocket4 = new Client(`http://localhost:${port}`);
       clientSocket4 = new Client(`http://localhost:${port}`);
 
       io.on('connection', (socket) => {
@@ -43,22 +46,29 @@ describe('user room functionality', () => {
     });
   });
 
-  afterAll(() => {
-    io.close();
-    clientSocket.close();
-    clientSocket2.close();
-    clientSocket3.close();
-    clientSocket4.close();
+  afterAll(async () => {
+    await io.close();
+    await clientSocket.close();
+    await clientSocket2.close();
+    await clientSocket3.close();
+    await clientSocket4.close();
+    await httpServer.close();
   });
 
-  test('first client should be in room 0', () => {
+  afterAll(async () => {
+    await new Promise(resolve => setTimeout(() => resolve(), 10000)); // avoid jest open handle error
+  });
+
+  test('first client should be in room 0', (finish) => {
     const usersArr = Object.values(testUsers);
     expect(usersArr[1].room).toBe('0');
+    finish();
   });
 
-  test('final client should be in room 1', () => {
+  test('final client should be in room 1', (finish) => {
     const usersArr = Object.values(testUsers);
     expect(usersArr[3].room).toBe('1');
+    finish();
   });
 
 });
