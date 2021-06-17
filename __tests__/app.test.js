@@ -51,14 +51,16 @@ describe('user room functionality', () => {
     clientSocket4.close();
   });
 
-  test('first client should be in room 0', () => {
+  test('first client should be in room 0', (finish) => {
     const usersArr = Object.values(testUsers);
     expect(usersArr[1].room).toBe('0');
+    finish();
   });
 
-  test('final client should be in room 1', () => {
+  test('final client should be in room 1', (finish) => {
     const usersArr = Object.values(testUsers);
     expect(usersArr[3].room).toBe('1');
+    finish();
   });
 
 });
