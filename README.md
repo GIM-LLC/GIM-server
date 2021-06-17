@@ -8,8 +8,13 @@ _"Commited to providing the best industrial supplies for your company"_
 
 _One day, while cleaning the server trays, a kind young soul was thrust into a strange fate.. Their soul now lives within the server and needs your help to be set free..._
 
-The repository for the front end can be found [here](https://github.com/GIM-LLC/GIM)
+GIM LLC is an escape room inspired website where players work together to find clues to free the ghost! 
 
+Server side built using node.js, express, and socket.io for player interactivity. 
+
+The repository for the front end can be found [here](https://github.com/GIM-LLC/GIM-server).
+
+![alt text](public/readmeImg.png)
 
 ### Group Members
 - Katrina Cloyd [GitHub](https://github.com/KatrinaCloyd) | [LinkedIn](https://www.linkedin.com/in/katrinacloyd/)
@@ -19,10 +24,10 @@ The repository for the front end can be found [here](https://github.com/GIM-LLC/
 - Cameron Zimmerman [GitHub](https://github.com/CameronZimmerman) | [LinkedIn](https://www.linkedin.com/in/cameron-zimmerman/)
 
 
-## add actual netlify and heroku sites here
-GIM, LLC is hosted on [Netlify]()
+## delpoyed site links
+GIM, LLC is hosted on [Netlify](https://www.escapegim.com/)
 
-The GIM, LLC server is hosted on [Heroku]()
+The GIM, LLC server is hosted on [Heroku](https://gim-server.herokuapp.com)
 
 
 Project planning can be seen on our [Miro board](https://miro.com/app/board/o9J_lA3sn-w=/?utm_source=notification&utm_medium=email&utm_campaign=daily-updates&utm_content=go-to-board).
