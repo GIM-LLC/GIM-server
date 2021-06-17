@@ -12,10 +12,11 @@ describe('user room functionality', () => {
     clientSocket,
     clientSocket2,
     clientSocket3,
-    clientSocket4;
+    clientSocket4,
+    httpServer;
 
   beforeAll((done) => {
-    const httpServer = createServer();
+    httpServer = createServer();
     io = new Server(httpServer);
     httpServer.listen(() => {
       const port = httpServer.address().port;
@@ -49,6 +50,7 @@ describe('user room functionality', () => {
     clientSocket2.close();
     clientSocket3.close();
     clientSocket4.close();
+    httpServer.close();
   });
 
   test('first client should be in room 0', (finish) => {
