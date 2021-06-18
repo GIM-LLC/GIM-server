@@ -1,5 +1,6 @@
 # GIM, LLC
-## General Industrial Manufacturers, LLC
+
+## General Industrial Manufacturing, LLC
 
 _"Commited to providing the best industrial supplies for your company"_
 
@@ -10,7 +11,7 @@ _One day, while cleaning the server trays, a kind young soul was thrust into a s
 
 GIM LLC is an escape room inspired website where players work together to find clues to free the ghost! 
 
-Server side built using node.js, express, and socket.io for player interactivity. 
+Server side built using node.js, express, and socket.io for multiplayer interactivity. 
 
 The repository for the front end can be found [here](https://github.com/GIM-LLC/GIM-server).
 
