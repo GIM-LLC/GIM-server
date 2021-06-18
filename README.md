@@ -1,5 +1,5 @@
 # GIM, LLC
-## General Industrial Manufacturers, LLC
+## General Industrial Manufacturing, LLC
 
 _"Commited to providing the best industrial supplies for your company"_
 
