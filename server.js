@@ -7,6 +7,7 @@ const io = new Server(server, { cors: true });
 
 const PORT = process.env.PORT || 8080;
 
+//global state management for active users and ongoing games
 const users = {};
 const games = [];
 
@@ -19,12 +20,13 @@ const onConnection = (socket) => {
   const currentRoom = `${users[socket.id].room}`;
   socket.join(currentRoom);
   socket.broadcast.to(currentRoom).emit('new user', { [socket.id]: socket.id });
-  // socket.to(socket.id).emit('current users', Object.keys(users));
+
   // take in cursor movement data and broadcast to other clients
   const onMovement = (movementData) => {
     movementData.id = socket.id;
     socket.broadcast.to(currentRoom).emit('moving', movementData);
   };
+  // once game has started, add to ongoing games state
   const onGameStart = () => {
     if (!games.includes(currentRoom)) games.push(currentRoom);
   };
@@ -154,6 +156,7 @@ const onConnection = (socket) => {
   socket.on('footerTitleClick', onFooterTitleClick);
 };
 
+//runs when a client connects
 io.sockets.on('connection', onConnection);
 
 server.listen(PORT, () => {
